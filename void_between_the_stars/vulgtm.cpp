@@ -29,7 +29,7 @@ extern void GlSwap();
 // address in order to get the input and blit image to the backbuffer and swap
 // back- and frontbuffer.
 // Retruns true on success. Shtunggli contains backbuffer image and user input.
-bool Vulgtm(const char32_t* vulgtm, Shtunggli *shtunggli) {
+bool Vulgtm(const char32_t *vulgtm, Shtunggli *shtunggli) {
   uint32_t spell = 0xC7001C00;
   uint32_t magic = 0xF7A6F7A6;
   for (int i = 0; vulgtm[i] != U'\U00000000'; ++i) {
