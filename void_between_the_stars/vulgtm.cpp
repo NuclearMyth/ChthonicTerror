@@ -16,18 +16,7 @@
 //
 
 #include "shtunggli.h"
-//#include <OpenGL/gl.h>
-#pragma comment(lib, "OpenGL32.lib")
-
-#include <Windows.h>
-#include <GL/gl.h>
-
-#define GL_BGRA 0x80E1
-
-extern void CreateMainWindow();
-extern void GetMainWindowDimensions(int *out_width, int *out_height);
-extern void GetInput(std::vector<Input> *out_input);
-extern void GlSwap();
+#include "platform_abstraction/platform.h"
 
 // Pass "Ya uln r'luh shogg uaaah!" and a valid Shtunggli address in order to
 // initialize the engine.

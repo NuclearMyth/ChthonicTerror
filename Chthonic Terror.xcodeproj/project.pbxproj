@@ -25,6 +25,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3455EE721989AF0C00E6CF4C /* platform.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = platform.h; sourceTree = "<group>"; };
 		34ED313C196F31F0007D7D4B /* Chthonic Terror */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Chthonic Terror"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34F1B0241972959A0006C44B /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		34F1B0291972964A0006C44B /* main_window.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = main_window.mm; sourceTree = "<group>"; };
@@ -89,6 +90,7 @@
 				34F1B0301973229C0006C44B /* input.h */,
 				34F1B0281972964A0006C44B /* mac_os_x */,
 				34F1B02A1972964A0006C44B /* windows */,
+				3455EE721989AF0C00E6CF4C /* platform.h */,
 			);
 			path = platform_abstraction;
 			sourceTree = "<group>";

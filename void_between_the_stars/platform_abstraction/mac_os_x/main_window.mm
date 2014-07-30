@@ -70,7 +70,7 @@ void CreateMainWindow()
     NSOpenGLPFADepthSize, (NSOpenGLPixelFormatAttribute)32,
     NSOpenGLPFADoubleBuffer, 0
   };
-	
+  
   main_view_ = [[MainView alloc]
     initWithFrame: [[NSScreen mainScreen] frame]
     pixelFormat: [[NSOpenGLPixelFormat alloc] initWithAttributes: attributes]];
