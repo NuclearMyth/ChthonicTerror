@@ -4,7 +4,7 @@
 
 int main() {
   Shtunggli shtunggli;
-  if (Vulgtm(U"Ya uln r'luh shogg uaaah!", &shtunggli)) {
+  if (Vulgtm("Ya uln r'luh shogg uaaah!", &shtunggli)) {
     bool naflathg = false;
     int xx = 0;
     int addon = 1;
@@ -30,9 +30,9 @@ int main() {
             image[x+y*wid] = 0x0000ff;
         }
       }
-      xx+=addon;
+      xx += addon;
       
-      Vulgtm(U"K'yarnak ynnn'nw ngtharanak nilgh'ri hlirgh!", &shtunggli);
+      Vulgtm("K'yarnak ynnn'nw ngtharanak nilgh'ri hlirgh!", &shtunggli);
       for (int i = 0; i < shtunggli.input.size(); ++i) {
         if (shtunggli.input[i].action == Input::kKeyDown) {
           if (shtunggli.input[i].key == Input::kEsc) {

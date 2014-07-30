@@ -29,29 +29,29 @@ struct Input {
   };
   
   enum KeyCode {
-    kNone = 0,
-    kLeftMouse = 1,
-    kMiddleMouse = 2,
-    kRightMouse = 3,
-    kUpArrow = 4,
-    kDownArrow = 5,
-    kLeftArrow = 6,
-    kRightArrow = 7,
-    kBackspace = 8,
-    kShift = 9,
-    kControl = 10,
-    kAlt = 11,
-    kEsc = 12,
-    kReturn = 13,
-    kCount
+    kNone = -1,
+    kLeftMouse = -2,
+    kMiddleMouse = -3,
+    kRightMouse = -4,
+    kUpArrow = -5,
+    kDownArrow = -6,
+    kLeftArrow = -7,
+    kRightArrow = -8,
+    kBackspace = -9,
+    kShift = -10,
+    kControl = -11,
+    kAlt = -12,
+    kEsc = -13,
+    kReturn = -14,
+    kCount = 14
   };
   
   Action action;
-  char32_t key;
+  char key;
   int mouse_x;
   int mouse_y;
   
-  Input(Action in_action, char32_t in_key, int in_mouse_x, int in_mouse_y)
+  Input(Action in_action, char in_key, int in_mouse_x, int in_mouse_y)
       : action(in_action)
       , key(in_key)
       , mouse_x(in_mouse_x)

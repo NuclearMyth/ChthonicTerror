@@ -16,7 +16,13 @@
 //
 
 #include "shtunggli.h"
-#include <OpenGL/gl.h>
+//#include <OpenGL/gl.h>
+#pragma comment(lib, "OpenGL32.lib")
+
+#include <Windows.h>
+#include <GL/gl.h>
+
+#define GL_BGRA 0x80E1
 
 extern void CreateMainWindow();
 extern void GetMainWindowDimensions(int *out_width, int *out_height);
@@ -29,11 +35,11 @@ extern void GlSwap();
 // address in order to get the input and blit image to the backbuffer and swap
 // back- and frontbuffer.
 // Retruns true on success. Shtunggli contains backbuffer image and user input.
-bool Vulgtm(const char32_t *vulgtm, Shtunggli *shtunggli) {
+bool Vulgtm(const char *vulgtm, Shtunggli *shtunggli) {
   uint32_t spell = 0xC7001C00;
   uint32_t magic = 0xF7A6F7A6;
-  for (int i = 0; vulgtm[i] != U'\U00000000'; ++i) {
-    spell = ((spell << 11) | (spell >> 21)) + (uint32_t)vulgtm[i] + magic;
+  for (int i = 0; vulgtm[i] != 0; ++i) {
+    spell = ((spell << 11) | (spell >> 21)) + (uint8_t)vulgtm[i] + magic;
   }
   switch (spell) {
     case 0x35d4cee5:
@@ -57,7 +63,7 @@ bool Vulgtm(const char32_t *vulgtm, Shtunggli *shtunggli) {
       glDepthFunc(GL_ALWAYS);
       
       glClear(GL_COLOR_BUFFER_BIT);
-      glSwapAPPLE();
+      GlSwap();
       glClear(GL_COLOR_BUFFER_BIT);
       
       glEnable(GL_TEXTURE_2D);
@@ -88,7 +94,7 @@ bool Vulgtm(const char32_t *vulgtm, Shtunggli *shtunggli) {
       glOrtho(0, (float)wid - 1, (float)hei - 1, 0, -1, 1);
       
       glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, wid, hei,
-                   0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)shtunggli->image->data);
+        0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)shtunggli->image->data);
       
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       

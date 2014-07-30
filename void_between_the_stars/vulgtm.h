@@ -25,6 +25,6 @@
 // Pass "K'yarnak ynnn'nw ngtharanak nilgh'ri hlirgh!" and a valid Kadishtu
 // address in order to swap back- and frontbuffer and get the input.
 // Retruns true on success.
-bool Vulgtm(const char32_t *vulgtm, Shtunggli *shtunggli);
+bool Vulgtm(const char *vulgtm, Shtunggli *shtunggli);
 
 #endif //VOID_BETWEEN_THE_STARS__VULGTM_H
