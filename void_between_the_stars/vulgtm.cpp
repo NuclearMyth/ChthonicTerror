@@ -18,6 +18,14 @@
 #include "shtunggli.h"
 #include "platform_abstraction/platform.h"
 
+int Pot(int i) {
+  int w2 = 1;
+  while (w2 < i) {
+    w2 <<= 1;
+  }
+  return w2;
+}
+
 // Pass "Ya uln r'luh shogg uaaah!" and a valid Shtunggli address in order to
 // initialize the engine.
 // Pass "K'yarnak ynnn'nw ngtharanak nilgh'ri hlirgh!" and a valid Shtunggli
@@ -34,7 +42,7 @@ bool Vulgtm(const char *vulgtm, Shtunggli *shtunggli) {
     case 0x35d4cee5:
     {
       CreateMainWindow();
-      
+
       glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
       glClearDepth(1.0f);
       glDisable(GL_DEPTH_TEST);
@@ -56,17 +64,20 @@ bool Vulgtm(const char *vulgtm, Shtunggli *shtunggli) {
       glClear(GL_COLOR_BUFFER_BIT);
       
       glEnable(GL_TEXTURE_2D);
+
       GLuint texture = 0;
       glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
       glBindTexture(GL_TEXTURE_2D, texture);
       
       int wid = 0;
       int hei = 0;
       GetMainWindowDimensions(&wid, &hei);
-      int image_size = wid * hei;
+      int image_size = Pot(wid) * Pot(hei);
       shtunggli->image = new Image;
       shtunggli->image->width = wid;
       shtunggli->image->height = hei;
+      shtunggli->image->stride = Pot(wid);
       shtunggli->image->data = new uint32_t[image_size];
 
       GetInput(&shtunggli->input);
@@ -74,37 +85,54 @@ bool Vulgtm(const char *vulgtm, Shtunggli *shtunggli) {
       break;
     }
     case 0x5d1a3745:
-    {
+    { 
       int wid = shtunggli->image->width;
       int hei = shtunggli->image->height;
+
+      int w2 = Pot(wid);
+      int h2 = Pot(hei);
+
       glViewport(0, 0, wid, hei);
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
-      glOrtho(0, (float)wid - 1, (float)hei - 1, 0, -1, 1);
+      glOrtho(0, (float)wid, (float)hei, 0, -1, 1);
       
-      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, wid, hei,
-        0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)shtunggli->image->data);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+        GL_NEAREST);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+        GL_NEAREST);// GL_LINEAR);
+
+      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w2, h2,
+        0, GL_BGRA, GL_UNSIGNED_BYTE, (void*)shtunggli->image->data);      
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      
+      int err = glGetError();
+
+      if (err != GL_NO_ERROR) {
+        //MessageBox(0, "gl error 4", "gl error", 0);
+        exit(1);
+      }
+
       glBegin(GL_QUADS);
       
       glTexCoord2f(0.0f, 0.0f);
       glVertex2f(0.0f, 0.0f);
       
       glTexCoord2f(0.0f, 1.0f);
-      glVertex2f(0.0f, (float)hei - 1.0);
+      glVertex2f(0.0f, (float)h2);
       
       glTexCoord2f(1.0f, 1.0f);
-      glVertex2f((float)wid - 1.0f, (float)hei - 1.0f);
+      glVertex2f((float)w2, (float)h2);
       
       glTexCoord2f(1.0f, 0.0f);
-      glVertex2f((float)wid - 1.0f, 0.0f);
+      glVertex2f((float)w2, 0.0f);
       
       glEnd();
       
       GlSwap();
-      
+
       GetMainWindowDimensions(&shtunggli->image->width,
                               &shtunggli->image->height);
       if (shtunggli->image->width != wid || shtunggli->image->height != hei) {

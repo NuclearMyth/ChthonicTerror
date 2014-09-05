@@ -13,21 +13,22 @@ int main() {
       memset(shtunggli.image->data, 0, image_size);
       int wid = shtunggli.image->width;
       int hei = shtunggli.image->height;
+      int stride = shtunggli.image->stride;
       uint32_t *image = shtunggli.image->data;
       for (int x = 0; x < wid; ++x) {
         for (int y = 0; y < hei; ++y) {
-          image[x+y*wid] = ((x % 2 + y % 2) == 1 ? 1 : 0) * 0xffffff;
+          image[x + y*stride] = ((x % 2 + y % 2) == 1 ? 1 : 0) * 0xffffff;
           if (x == 0)
-            image[x+y*wid] = 0xff0000;
+            image[x + y*stride] = 0xff0000;
           if (x == wid-1)
-            image[x+y*wid] = 0x00ff00;
+            image[x + y*stride] = 0x00ff00;
           if (y == hei-1)
-            image[x+y*wid] = 0x00ff00;
+            image[x + y*stride] = 0x00ff00;
           if (y == 0)
-            image[x+y*wid] = 0x0000ff;
+            image[x + y*stride] = 0x0000ff;
           
           if (y >= xx % hei && y < xx % hei + 10)
-            image[x+y*wid] = 0x0000ff;
+            image[x + y*stride] = 0x0000ff;
         }
       }
       xx += addon;

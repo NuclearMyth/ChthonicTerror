@@ -26,6 +26,8 @@
 #pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 
 HWND h_window = 0;
+HDC hdc = 0;
+HGLRC hglrc = 0;
 
 LRESULT CALLBACK WindowProcedure(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
   switch (uMsg) {
@@ -87,16 +89,29 @@ void CreateMainWindow() {
 
   static PIXELFORMATDESCRIPTOR pfd = {sizeof(PIXELFORMATDESCRIPTOR), 1,
     PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER, PFD_TYPE_RGBA, 32,
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, PFD_MAIN_PLANE, 0, 0, 0, 0};
-  HDC hdc = GetDC(h_window);
-  GLuint PixelFormat = ChoosePixelFormat(hdc, &pfd);
-  SetPixelFormat(hdc, PixelFormat, &pfd);
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0/*16*/, 0, 0, PFD_MAIN_PLANE, 0, 0, 0, 0};
+  hdc = GetDC(h_window);
+  GLuint pixel_format = ChoosePixelFormat(hdc, &pfd);
+  if (pixel_format == 0) {
+    MessageBox(h_window, "ChoosePixelFormat failed.", "Error", MB_ICONERROR | MB_OK);
+    ExitProcess(1);
+  }
 
-  HGLRC hglrc = wglCreateContext(hdc);
-  wglMakeCurrent(hdc, hglrc);
-  ReleaseDC(h_window, hdc);
-  //wglMakeCurrent(NULL, NULL);  
-  //wglDeleteContext(hglrc);
+  if (!SetPixelFormat(hdc, pixel_format, &pfd)) {
+    MessageBox(h_window, "SetPixelFormat failed.", "Error", MB_ICONERROR | MB_OK);
+    ExitProcess(1);
+  }
+
+  hglrc = wglCreateContext(hdc);
+  if (hglrc == 0) {
+    MessageBox(h_window, "wglCreateContext failed.", "Error", MB_ICONERROR | MB_OK);
+    ExitProcess(1);
+  }
+
+  if (!wglMakeCurrent(hdc, hglrc)) {
+    MessageBox(h_window, "wglMakeCurrent failed.", "Error", MB_ICONERROR | MB_OK);
+    ExitProcess(1);
+  }
 }
 
 extern void GetMainWindowDimensions(int *out_width, int *out_height) {
@@ -110,6 +125,10 @@ void GetInput(std::vector<Input> *out_input) {
   MSG msg;
   while (PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE)) {
     if (msg.message == WM_QUIT) {
+      wglMakeCurrent(NULL, NULL);  
+      wglDeleteContext(hglrc);
+      ReleaseDC(h_window, hdc);
+
       ExitProcess(0);
       return;
     }
@@ -123,7 +142,7 @@ void GetInput(std::vector<Input> *out_input) {
 }
 
 void GlSwap() {
-  HDC hdc = GetDC(h_window);
+  //HDC hdc = GetDC(h_window);
   SwapBuffers(hdc);
-  ReleaseDC(h_window, hdc);
+  //ReleaseDC(h_window, hdc);
 }

@@ -24,6 +24,7 @@ struct Image {
   uint32_t *data;
   int width;
   int height;
+  int stride;
 };
 
 #endif //VOID_BETWEEN_THE_STARS__PLATFORM_ABSTRACTION__IMAGE_H
